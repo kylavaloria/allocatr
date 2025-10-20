@@ -237,8 +237,8 @@ async function testHolidayEndpoints() {
     // CREATE Holiday
     log.info('Creating new holiday...');
     const createResponse = await axios.post(`${API_URL}/holidays`, {
-      HolidayDate: '2025-12-25',
-      Description: 'Christmas Day (Test)'
+      HolidayDate: '2025-11-15',
+      Description: 'Kyla Birthday (Test)'
     });
     testHolidayId = createResponse.data.data.HolidayID;
     log.success(`Holiday created with ID: ${testHolidayId}`);
@@ -275,8 +275,8 @@ async function testHolidayEndpoints() {
     // UPDATE Holiday
     log.info('Updating holiday description...');
     const updateResponse = await axios.put(`${API_URL}/holidays/${testHolidayId}`, {
-      HolidayDate: '2025-12-25',
-      Description: 'Christmas Day (Updated Test)'
+      HolidayDate: '2025-02-25',
+      Description: 'Test Holiday (Updated Test)'
     });
     log.success(`Holiday updated: ${updateResponse.data.data.Description}`);
 
