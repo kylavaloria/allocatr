@@ -1,0 +1,32 @@
+{
+  "name": "allocator-server",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup-db": "node scripts/setupDatabase.js",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test:api": "node scripts/testAPI.js"
+  },
+  "keywords": [
+    "resource-management",
+    "allocation",
+    "tracking"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mssql": "^12.0.0",
+    "tedious": "^19.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

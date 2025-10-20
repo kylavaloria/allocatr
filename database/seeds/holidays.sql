@@ -1,0 +1,27 @@
+-- Seed data for Holidays table
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-08-26', 'National Heroes'' Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-11-30', 'Bonifacio Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-12-25', 'Christmas Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-12-30', 'Rizal Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-08-23', 'Ninoy Aquino Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-11-01', 'All Saints'' Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-12-08', 'Feast of the Immaculate Conception of Mary');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-12-31', 'Last Day of the Year');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-11-02', 'All Souls'' Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2024-12-24', 'Christmas Eve');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-01-01', 'New Year''s Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-01-29', 'Chinese New Year');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-04-09', 'Araw ng Kagitingan');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-04-17', 'Maundy Thursday');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-04-18', 'Good Friday');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-05-01', 'Labor Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-06-12', 'Independence Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-08-25', 'National Heroes'' Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-08-21', 'Ninoy Aquino Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-10-31', 'All Saints'' Day Eve');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-11-01', 'All Saints'' Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-11-30', 'Bonifacio Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-12-08', 'Feast of the Immaculate Conception of Mary');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-12-24', 'Christmas Eve');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-12-25', 'Christmas Day');
+INSERT INTO Holidays (HolidayDate, Description) VALUES ('2025-12-30', 'Rizal Day');
