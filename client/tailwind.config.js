@@ -6,17 +6,51 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Primary Blues
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
+          DEFAULT: '#138DCC',
+          light: '#3F788B',
+          lighter: '#E5F6FF',
+          dark: '#377888',
         },
-        success: '#10b981',
-        warning: '#f59e0b',
-        danger: '#ef4444',
-      }
+        // Secondary Colors
+        secondary: {
+          blue: '#449F9D',
+          orange: '#EDAC5E',
+          teal: '#9FF4E5',
+          green: '#C4E78F',
+        },
+        // Grays
+        gray: {
+          50: '#FFFFFF',
+          100: '#E5F6FF',
+          200: '#B3CCDA',
+          300: '#526D82',
+        },
+        // Status Colors
+        status: {
+          done: '#C4E78F',
+          ongoing: '#EDAC5E',
+          paused: '#526D82',
+          future: '#138DCC',
+          leave: '#B3CCDA',
+        },
+      },
+      fontFamily: {
+        sans: ['Roboto', 'sans-serif'],
+      },
+      fontSize: {
+        // Headings
+        'h1': ['32px', { lineHeight: '1.2', fontWeight: '500' }],
+        'h2': ['24px', { lineHeight: '1.2', fontWeight: '500' }],
+        'h3': ['20px', { lineHeight: '1.2', fontWeight: '500' }],
+        'h4': ['16px', { lineHeight: '1.2', fontWeight: '500' }],
+        // Body Text
+        'body': ['24px', { lineHeight: '1.5', fontWeight: '400' }],
+        'body-md': ['16px', { lineHeight: '1.5', fontWeight: '400' }],
+        'body-sm': ['16px', { lineHeight: '1.5', fontWeight: '300' }],
+        'body-xs': ['12px', { lineHeight: '1.5', fontWeight: '400' }],
+      },
     },
   },
   plugins: [],
