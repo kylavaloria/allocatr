@@ -1,109 +1,129 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
-import AllocationBar from '../ui/AllocationBar';
-import ProgressBar from '../ui/ProgressBar';
-import BillableIndicator from '../ui/BillableIndicator';
-import StatusBadge from '../ui/StatusBadge';
+import CurrentAllocationBar from '../ui/CurrentAllocationBar';
+import BillableBar from '../ui/BillableBar';
 import Action from '../ui/Action';
-import TaskModal from '../tasks/TaskModal'; // 1. Import modals
-import DeleteDialogue from '../ui/DeleteDialogue';
+import ResourceModal from './ResourceModal'; // 1. Import the modal
+import DeleteDialogue from '../ui/DeleteDialogue'; // 2. Import delete dialog
 
-const TaskRow = ({ task }) => {
-  // --- 2. State for Action Dropdown ---
+const ResourceRow = ({
+  name,
+  unit,
+  role,
+  generalization,
+  specialization,
+  currentAllocation,
+  billableAllocation,
+  isLastRow,
+  isExpanded,
+  onClick,
+  // 3. We no longer need onEdit or onDelete props from the parent
+}) => {
+  // --- State for Action Dropdown ---
   const [isActionOpen, setIsActionOpen] = useState(false);
   const actionRef = useRef(null); // Ref for click-outside detection
 
-  // --- 3. NEW STATE for Modals ---
+  // --- 4. NEW STATE for Modals ---
+  // This state will track *which* modal to show: 'edit', 'delete', or 'null'
   const [modalType, setModalType] = useState(null);
 
-  // --- 4. Click-outside-to-close logic ---
+  // --- Click-outside-to-close logic for Action ---
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // If the ref exists and the click was *outside* the action menu
       if (actionRef.current && !actionRef.current.contains(event.target)) {
         setIsActionOpen(false); // Close the menu
       }
     };
+    // Add event listener
     document.addEventListener('mousedown', handleClickOutside);
+    // Cleanup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, []); // Empty dependency array so this only runs once
 
-  // --- 5. UPDATED Modal Handlers ---
+  // --- 5. UPDATED Handlers ---
   const handleEdit = () => {
-    setModalType('edit'); // Open edit modal
+    setModalType('edit'); // Set the local state to open the edit modal
     setIsActionOpen(false);
   };
 
   const handleDelete = () => {
-    setModalType('delete'); // Open delete modal
+    setModalType('delete'); // Set the local state to open the delete modal
     setIsActionOpen(false);
   };
 
   const closeModal = () => {
-    setModalType(null); // Close any modal
-  };
-
-  const handleSubmitEdit = () => {
-    console.log('SUBMITTING EDIT for task:', task.name);
-    closeModal();
+    setModalType(null); // Close any open modal
   };
 
   const handleConfirmDelete = () => {
-    console.log('DELETING task:', task.name);
+    console.log('DELETING:', name);
     closeModal();
   };
 
+  const handleSubmitEdit = () => {
+    console.log('SUBMITTING EDIT:', name);
+    closeModal();
+  };
+
+  // --- New logic for rounding ---
+  const applyLastRowRounding = isLastRow && !isExpanded;
+
+  // 6. Pack this row's data into an object for the modal
+  const resourceData = {
+    name,
+    unit,
+    role,
+    generalization,
+    specialization,
+    currentAllocation,
+    billableAllocation,
+    // Add capacity and rateCard if they exist in your data
+    // capacity: 40,
+    // rateCard: 572,
+  };
+
   return (
-    // 6. Use Fragment to render the row AND its modals
+    // 7. Use a Fragment to render the row AND its modals
     <Fragment>
-      <tr className="text-gray-300 text-body-xs font-normal font-sans border-b border-gray-200 last:border-b-0">
-        {/* Task */}
-        <td className="px-4 py-3 align-top">{task.name}</td>
-
-        {/* Type */}
-        <td className="px-4 py-3 align-top whitespace-nowrap">{task.type}</td>
-
-        {/* Schedule */}
-        <td className="px-4 py-3 align-top whitespace-nowrap">
-          {task.schedule}
+      <tr
+        onClick={onClick} // Click handler for the whole row (to expand)
+        className={`text-gray-300 text-body-sm font-normal font-sans border-t border-gray-200
+                  cursor-pointer transition-colors
+                  ${isExpanded ? 'bg-primary-lighter' : 'hover:bg-primary-lighter'}`}
+      >
+        <td className={`px-4 py-3 ${applyLastRowRounding ? 'rounded-bl-2xl' : ''}`}>
+          {name}
         </td>
-
-        {/* Work Days */}
-        <td className="px-4 py-3 align-top">{task.workDays}</td>
-
-        {/* Allocation */}
-        <td className="px-4 py-3 align-top">
-          <div className="flex items-center gap-2 whitespace-nowrap">
-            <AllocationBar value={task.allocation} />
-            <span>{task.allocation}%</span>
+        <td className="px-4 py-3">{unit}</td>
+        <td className="px-4 py-3">{role}</td>
+        <td className="px-4 py-3">{generalization}</td>
+        <td className="px-4 py-3">{specialization}</td>
+        <td className="px-4 py-3">
+          <div className="flex items-center gap-2">
+            <CurrentAllocationBar value={currentAllocation} />
+            <span>{currentAllocation}%</span>
+          </div>
+        </td>
+        <td className="px-4 py-3">
+          <div className="flex items-center gap-2">
+            <BillableBar value={billableAllocation} />
+            <span>{billableAllocation}%</span>
           </div>
         </td>
 
-        {/* Progress */}
-        <td className="px-4 py-3 align-top">
-          <div className="flex items-center gap-2 whitespace-nowrap">
-            <ProgressBar value={task.progress} />
-            <span>{task.progress}%</span>
-          </div>
-        </td>
-
-        {/* Billable */}
-        <td className="px-4 py-3 align-top">
-          <BillableIndicator isBillable={task.isBillable} />
-        </td>
-
-        {/* Status */}
-        <td className="px-4 py-3 align-top">
-          <StatusBadge status={task.status} />
-        </td>
-
-        {/* --- 7. Actions Column Updated --- */}
-        <td className="px-4 py-3 align-top text-center">
+        {/* --- Actions Column Updated --- */}
+        <td
+          className={`px-4 py-3 text-center ${
+            applyLastRowRounding ? 'rounded-br-2xl' : ''
+          }`}
+        >
           {/* Wrap button and dropdown in a relative container */}
           <div
             className="relative inline-block"
             ref={actionRef}
-            onClick={(e) => e.stopPropagation()} // Stop click from bubbling
+            onClick={(e) => e.stopPropagation()} // Stops click from bubbling to the row
           >
             <button
               onClick={() => setIsActionOpen((prev) => !prev)} // Toggle state
@@ -129,16 +149,16 @@ const TaskRow = ({ task }) => {
 
       {/* 8. RENDER THE MODALS (conditionally) */}
       {modalType === 'edit' && (
-        <TaskModal
+        <ResourceModal
           type="edit"
-          taskData={task}
+          resourceData={resourceData}
           onClose={closeModal}
           onSubmit={handleSubmitEdit}
         />
       )}
       {modalType === 'delete' && (
         <DeleteDialogue
-          type="Task"
+          type="Resource"
           onClose={closeModal}
           onConfirm={handleConfirmDelete}
         />
@@ -147,4 +167,4 @@ const TaskRow = ({ task }) => {
   );
 };
 
-export default TaskRow;
+export default ResourceRow;

@@ -27,7 +27,7 @@ const SearchInput = ({ placeholder = 'Search' }) => {
         type="text"
         placeholder={placeholder}
         className="w-full border border-gray-200 rounded-full
-                   py-3 pl-11 pr-4
+                   py-2 pl-11 pr-4
                    text-gray-300 text-body-md font-normal
                    placeholder-gray-300
                    focus:outline-none focus:border-primary-dark focus:ring-2 focus:ring-primary-lighter transition-all duration-200"

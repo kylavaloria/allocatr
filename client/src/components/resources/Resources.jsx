@@ -40,7 +40,7 @@ const Resources = () => {
         {/* Controls: Search + Buttons */}
         <div className="flex justify-between items-center mb-6">
           {/* Search Bar (Left) */}
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md ">
             <SearchInput placeholder="Search" />
           </div>
 
@@ -49,7 +49,7 @@ const Resources = () => {
             {/* "Assign Task" Button (Gray) */}
             <button
               onClick={() => setIsTaskModalOpen(true)}
-              className="flex items-center justify-center gap-2 text-body-md font-normal font-sans rounded-xl px-6 py-3 text-center transition-all duration-200
+              className="flex items-center justify-center gap-2 text-body-md font-normal font-sans rounded-xl px-6 py-2 text-center transition-all duration-200
                                border border-gray-300 text-gray-300 bg-white
                                hover:bg-gray-300 hover:text-gray-50
                                focus:outline-none focus:bg-gray-300 focus:text-gray-50"
@@ -61,7 +61,7 @@ const Resources = () => {
             {/* "Add Resource" Button (Blue) */}
             <button
               onClick={() => setIsResourceModalOpen(true)}
-              className="flex items-center justify-center gap-2 text-body-md font-normal font-sans rounded-xl px-6 py-3 text-center transition-all duration-200
+              className="flex items-center justify-center gap-2 text-body-md font-normal font-sans rounded-xl px-6 py-2 text-center transition-all duration-200
                                border border-primary text-primary bg-white
                                hover:bg-primary hover:text-gray-50
                                focus:outline-none focus:bg-primary focus:text-gray-50"

@@ -48,7 +48,7 @@ module.exports = {
         // Body Text
         'body': ['24px', { lineHeight: '1.5', fontWeight: '400' }],
         'body-md': ['16px', { lineHeight: '1.5', fontWeight: '400' }],
-        'body-sm': ['16px', { lineHeight: '1.5', fontWeight: '300' }],
+        'body-sm': ['14px', { lineHeight: '1.5', fontWeight: '300' }],
         'body-xs': ['12px', { lineHeight: '1.5', fontWeight: '400' }],
       },
     },

@@ -89,13 +89,13 @@ const ResourceTableHeader = () => {
               widthClass = 'w-[15%]';
               break;
             case 'Unit':
-              widthClass = 'w-[15%]';
+              widthClass = 'w-[18%]';
               break;
             case 'Role':
-              widthClass = 'w-[15%]';
+              widthClass = 'w-[18%]';
               break;
             case 'Generalization':
-              widthClass = 'w-[15%]';
+              widthClass = 'w-[20%]';
               break;
             case 'Specialization':
               widthClass = 'w-[20%]'; // Make this one wider
@@ -111,7 +111,7 @@ const ResourceTableHeader = () => {
           return (
             <th
               key={header}
-              className={`relative text-primary-dark text-h4 font-bold px-4 py-3 text-left font-sans
+              className={`relative text-primary-dark body-sm font-semibold px-4 py-3 text-left font-sans
                           ${isFirst ? 'rounded-tl-2xl' : ''}
                           ${widthClass}`} // Width class applied here
             >

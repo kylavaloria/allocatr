@@ -107,7 +107,7 @@ const TaskRow = ({ task }) => {
           >
             <button
               onClick={() => setIsActionOpen((prev) => !prev)} // Toggle state
-              className="text-gray-300 p-1 rounded-full hover:text-primary-dark hover:bg-primary-lighter transition-colors"
+              className="text-gray-300 p-1 rounded-full hover:text-primary-dark transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
