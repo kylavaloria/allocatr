@@ -111,7 +111,7 @@ const ResourceTableHeader = () => {
           return (
             <th
               key={header}
-              className={`relative text-primary-dark body-sm font-semibold px-4 py-3 text-left font-sans
+              className={`relative text-primary-dark body-sm font-medium px-4 py-3 text-left font-sans
                           ${isFirst ? 'rounded-tl-2xl' : ''}
                           ${widthClass}`} // Width class applied here
             >

@@ -62,9 +62,9 @@ const Resources = () => {
             <button
               onClick={() => setIsResourceModalOpen(true)}
               className="flex items-center justify-center gap-2 text-body-md font-normal font-sans rounded-xl px-6 py-2 text-center transition-all duration-200
-                               border border-primary text-primary bg-white
-                               hover:bg-primary hover:text-gray-50
-                               focus:outline-none focus:bg-primary focus:text-gray-50"
+                               border border-gray-300 text-gray-300 bg-white
+                               hover:bg-gray-300 hover:text-gray-50
+                               focus:outline-none focus:bg-gray-300 focus:text-gray-50"
             >
               <span>Add Resource</span>
               <span className="text-xl font-light">+</span>

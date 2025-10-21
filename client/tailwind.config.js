@@ -11,11 +11,11 @@ module.exports = {
           DEFAULT: '#138DCC',
           light: '#3F788B',
           lighter: '#E5F6FF',
-          dark: '#377888',
+          dark: '#3778BB',
         },
         // Secondary Colors
         secondary: {
-          blue: '#449F9D',
+          blue: '#436F9D',
           orange: '#EDAC5E',
           teal: '#9FF4E5',
           green: '#C4E78F',
