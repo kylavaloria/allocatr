@@ -12,7 +12,7 @@ const AllocationBar = ({ value }) => {
     <div className="flex items-center gap-2 w-28"> {/* Fixed width for consistent bar size */}
       <div className="w-full h-4 bg-white border border-gray-200 rounded-full overflow-hidden">
         <div
-          className="h-full bg-secondary-blue transition-all duration-300 ease-out"
+          className="h-full bg-primary-dark transition-all duration-300 ease-out"
           style={{ width: `${percentage}%` }}
         ></div>
       </div>
