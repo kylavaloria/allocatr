@@ -4,7 +4,7 @@ import ProgressBar from '../ui/ProgressBar';
 import BillableIndicator from '../ui/BillableIndicator';
 import StatusBadge from '../ui/StatusBadge';
 import Action from '../ui/Action';
-import TaskModal from '../tasks/TaskModal'; // 1. Import modals
+import TaskModal from './TaskModal'; // 1. Import modals
 import DeleteDialogue from '../ui/DeleteDialogue';
 
 const TaskRow = ({ task }) => {
