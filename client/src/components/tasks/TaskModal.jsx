@@ -7,7 +7,7 @@ const TaskModal = ({ type = 'add', onClose, onSubmit }) => {
 
   return (
     // Modal Overlay
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
+     <div className="fixed inset-0 flex items-start justify-center bg-black bg-opacity-30 z-50 overflow-y-auto p-8">
 
       {/* Modal Card */}
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8 relative font-sans">
@@ -34,6 +34,7 @@ const TaskModal = ({ type = 'add', onClose, onSubmit }) => {
           <Input label="Task Name" />
           <Input label="Resource" />
           <Input label="Task Type" />
+          <Input label="Status" />
 
           {/* Two-column row for dates */}
           <div className="grid grid-cols-2 gap-4">

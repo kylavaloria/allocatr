@@ -21,7 +21,7 @@ const ResourceDetails = ({ resource, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-black bg-opacity-30 z-50 overflow-y-auto p-8">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-8 relative font-sans">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-4xl p-8 relative font-sans">
         {/* Close Button */}
         <button
           onClick={onClose}
