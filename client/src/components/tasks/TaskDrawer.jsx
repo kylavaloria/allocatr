@@ -3,7 +3,7 @@ import TaskHeader from './TaskHeader';
 import TaskRow from './TaskRow';
 import { useTasks } from '../../hooks/useTasks';
 
-const TaskDrawer = ({ resourceId, onRefresh }) => {
+const TaskDrawer = ({ resourceId, onRefresh, availableResources = [] }) => {
   const [tasks, setTasks] = useState([]);
   const { fetchTasksByResource, loading, error } = useTasks();
 
@@ -57,6 +57,7 @@ const TaskDrawer = ({ resourceId, onRefresh }) => {
               key={task.TaskID}
               task={task}
               onUpdate={handleTaskUpdate}
+              availableResources={availableResources}
             />
           ))}
         </tbody>

@@ -79,6 +79,7 @@ const ResourceTable = ({ resources = [], onUpdate, onDelete, onRefresh }) => {
                         <TaskDrawer
                           resourceId={resource.ResourceID}
                           onRefresh={onRefresh}
+                          availableResources={resources}
                         />
                       </div>
                     </td>

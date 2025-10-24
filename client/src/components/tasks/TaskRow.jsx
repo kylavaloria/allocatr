@@ -7,13 +7,16 @@ import Action from '../ui/Action';
 import TaskModal from './TaskModal';
 import DeleteDialogue from '../ui/DeleteDialogue';
 import { useTasks } from '../../hooks/useTasks';
+import { useHolidays } from '../../hooks/useHolidays';
 
-const TaskRow = ({ task, onUpdate }) => {
+const TaskRow = ({ task, onUpdate, availableResources = [] }) => {
   const [isActionOpen, setIsActionOpen] = useState(false);
   const actionRef = useRef(null);
   const [modalType, setModalType] = useState(null);
+  const [workDays, setWorkDays] = useState(0);
 
   const { updateTask, deleteTask } = useTasks();
+  const { holidays } = useHolidays();
 
   // Format dates
   const formatDate = (dateString) => {
@@ -26,15 +29,55 @@ const TaskRow = ({ task, onUpdate }) => {
     });
   };
 
-  // Calculate work days between dates
+  // Check if a date is a weekend (Saturday or Sunday)
+  const isWeekend = (date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6; // 0 = Sunday, 6 = Saturday
+  };
+
+  // Check if a date is a holiday
+  const isHoliday = (date) => {
+    const dateTime = new Date(date).setHours(0, 0, 0, 0);
+    return holidays.some(holiday => {
+      const holidayTime = new Date(holiday.HolidayDate).setHours(0, 0, 0, 0);
+      return holidayTime === dateTime;
+    });
+  };
+
+  // Calculate work days between dates (excludes weekends and holidays)
   const calculateWorkDays = (startDate, endDate) => {
     if (!startDate || !endDate) return 0;
+
     const start = new Date(startDate);
     const end = new Date(endDate);
-    const diffTime = Math.abs(end - start);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
+
+    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+
+    // If start is after end, return 0
+    if (start > end) return 0;
+
+    let workingDays = 0;
+    const current = new Date(start);
+
+    while (current <= end) {
+      // Check if current day is not a weekend and not a holiday
+      if (!isWeekend(current) && !isHoliday(current)) {
+        workingDays++;
+      }
+      current.setDate(current.getDate() + 1);
+    }
+
+    return workingDays;
   };
+
+  // Calculate work days when task dates or holidays change
+  useEffect(() => {
+    if (task.StartDate && task.EndDate) {
+      const days = calculateWorkDays(task.StartDate, task.EndDate);
+      setWorkDays(days);
+    }
+  }, [task.StartDate, task.EndDate, holidays]);
 
   // Map TaskStatus to status badge format
   const getStatusKey = (taskStatus) => {
@@ -118,7 +161,7 @@ const TaskRow = ({ task, onUpdate }) => {
 
         {/* Work Days */}
         <td className="px-4 py-3 align-top">
-          {calculateWorkDays(task.StartDate, task.EndDate)}
+          {workDays}
         </td>
 
         {/* Allocation */}
@@ -182,6 +225,7 @@ const TaskRow = ({ task, onUpdate }) => {
           taskData={task}
           onClose={closeModal}
           onSubmit={handleSubmitEdit}
+          availableResources={availableResources}
         />
       )}
       {modalType === 'delete' && (
