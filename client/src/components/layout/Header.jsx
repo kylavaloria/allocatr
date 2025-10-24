@@ -1,16 +1,11 @@
 import React from 'react';
 import { User } from 'lucide-react';
-import logoSrc from '../../assets/images/logo.png'; // Make sure this path is correct
+import logoSrc from '../../assets/images/logo.png';
 
-/**
- * Renders the main application header.
- * Based on the design in image_2cdf9f.png.
- *
- */
 const Header = () => {
-  // Assuming "Resources" is the active page for this view
-  const activeLinkClasses = "text-primary-dark font-medium border-b-2 border-primary pb-1"; //
-  const inactiveLinkClasses = "text-gray-300 hover:text-primary-dark transition-colors pb-1"; //
+
+  const activeLinkClasses = "text-primary-dark font-medium border-b-2 border-primary pb-1";
+  const inactiveLinkClasses = "text-gray-300 hover:text-primary-dark transition-colors pb-1";
 
   return (
     <header className="bg-white border-b border-gray-200 w-full font-sans">
@@ -22,7 +17,7 @@ const Header = () => {
           <img
             src={logoSrc}
             alt="Allocatr Logo"
-            className="h-12 w-auto" // Adjusted height slightly
+            className="h-12 w-auto"
           />
 
           {/* Wrapper for Brand + Tagline */}
