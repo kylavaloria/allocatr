@@ -6,8 +6,8 @@ const ErrorMessage = ({ title = 'Error', message }) => {
   }
 
   return (
-    <div className="bg-primary-lighter text-primary rounded-lg p-4 font-sans">
-      <p className="font-medium text-body-xs">
+    <div className="bg-primary-lighter text-primary p-4 font-sans">
+      <p className="font-semibold text-body-xs">
         {title}
       </p>
       <p className="font-light text-body-xs">
