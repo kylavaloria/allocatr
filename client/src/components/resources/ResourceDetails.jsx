@@ -1,8 +1,7 @@
 import React from 'react';
-import DonutChart from '../ui/DonutChart'; // Ensure path is correct
-import RevenueBar from '../ui/RevenueBar'; // Ensure path is correct
+import DonutChart from '../ui/DonutChart';
+import RevenueBar from '../ui/RevenueBar';
 
-// Helper component for the top grid
 const DetailItem = ({ label, value }) => (
   <div className="flex flex-col">
     <span className="text-gray-300 text-body-md font-light">{label}</span>
@@ -13,11 +12,30 @@ const DetailItem = ({ label, value }) => (
 const ResourceDetails = ({ resource, onClose }) => {
   const data = resource || {};
 
-  const currentAllocation = data.currentAllocation || 0;
-  const billableAllocation = data.billableAllocation || 0;
-  const actualRevenue = data.actualRevenue || 0;
-  const maxRevenue = data.maxRevenue || 0;
-  const forecastedRevenue = data.forecastedRevenue || 0;
+  const currentAllocation = data.currentAllocation || data.CurrentAllocation || 0;
+  const billableAllocation = data.billableAllocation || data.BillableAllocation || 0;
+  const actualRevenue = data.actualRevenueThisWeek || data.ActualRevenueThisWeek || 0;
+  const maxRevenue = data.maxRevenuePerWeek || data.MaxRevenuePerWeek || 0;
+  const forecastedRevenue = data.forecastedRevenue || data.ForecastedRevenue || 0;
+
+  // Format next availability date
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Available Now';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+
+  // Format currency
+  const formatCurrency = (value) => {
+    return `$${(value || 0).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+  };
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-black bg-opacity-30 z-50 overflow-y-auto p-8">
@@ -30,24 +48,42 @@ const ResourceDetails = ({ resource, onClose }) => {
           ×
         </button>
 
-        {/* --- Header --- */}
+        {/* Header */}
         <div className="mb-6">
-          <h1 className="text-primary text-h1 font-medium">{data.name || 'N/A'}</h1>
-          <p className="text-gray-300 text-h3 font-normal">{data.role || 'N/A'}</p>
+          <h1 className="text-primary text-h1 font-medium">
+            {data.name || data.Name || 'N/A'}
+          </h1>
+          <p className="text-gray-300 text-h3 font-normal">
+            {data.role || data.Role || 'N/A'}
+          </p>
         </div>
 
-        {/* --- Main Details Grid --- */}
+        {/* Main Details Grid */}
         <div className="grid grid-cols-3 gap-6 mb-6">
-          <DetailItem label="Unit" value={data.unit} />
-          <DetailItem label="Generalization" value={data.generalization} />
-          <DetailItem label="Specialization" value={data.specialization} />
-          <DetailItem label="Capacity per Week (Hours)" value={data.capacity} />
-          <DetailItem label="Rate Card" value={data.rateCard ? `$${data.rateCard}` : '-'} />
+          <DetailItem
+            label="Unit"
+            value={data.unit || data.Unit}
+          />
+          <DetailItem
+            label="Generalization"
+            value={data.generalization || data.Generalization}
+          />
+          <DetailItem
+            label="Specialization"
+            value={data.specialization || data.Specialization}
+          />
+          <DetailItem
+            label="Capacity per Week (Hours)"
+            value={data.capacity || data.CapacityPerWeek}
+          />
+          <DetailItem
+            label="Rate Card"
+            value={formatCurrency(data.rateCard || data.RateCard)}
+          />
         </div>
 
-        {/* --- Bottom Stats Box (REVISED LAYOUT) --- */}
+        {/* Bottom Stats Box */}
         <div className="border border-gray-200 rounded-lg p-4">
-          {/* Use Flexbox for better control over separators */}
           <div className="flex items-center justify-between gap-3">
 
             {/* Column 1: Current Allocation */}
@@ -61,7 +97,7 @@ const ResourceDetails = ({ resource, onClose }) => {
                   colorClass="text-secondary-blue"
                 />
                 <span className="absolute inset-0 flex items-center justify-center text-body font-normal text-gray-300">
-                  {currentAllocation.toFixed(2)}% {/* Ensure 2 decimal places */}
+                  {currentAllocation.toFixed(0)}%
                 </span>
               </div>
             </div>
@@ -80,7 +116,7 @@ const ResourceDetails = ({ resource, onClose }) => {
                   colorClass="text-secondary-green"
                 />
                 <span className="absolute inset-0 flex items-center justify-center text-body font-normal text-gray-300">
-                  {billableAllocation.toFixed(2)}% {/* Ensure 2 decimal places */}
+                  {billableAllocation.toFixed(0)}%
                 </span>
               </div>
             </div>
@@ -105,13 +141,19 @@ const ResourceDetails = ({ resource, onClose }) => {
             {/* Column 4: Availability */}
             <div className="flex flex-col gap-2 w-1/4 px-2">
               <div>
-                <span className="block text-gray-300 text-body-xs font-light">Next Availability</span>
-                <span className="block text-gray-300 text-body-md font-normal">{data.nextAvailability ? new Date(data.nextAvailability).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric'}) : '-'}</span>
+                <span className="block text-gray-300 text-body-xs font-light">
+                  Next Availability
+                </span>
+                <span className="block text-gray-300 text-body-md font-normal">
+                  {formatDate(data.nextAvailability || data.NextAvailability)}
+                </span>
               </div>
               <div>
-                <span className="block text-gray-300 text-body-xs font-light">Forecasted Revenue</span>
+                <span className="block text-gray-300 text-body-xs font-light">
+                  Forecasted Revenue
+                </span>
                 <span className="block text-gray-300 text-body-md font-normal">
-                  {`$${forecastedRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                  {formatCurrency(forecastedRevenue)}
                 </span>
               </div>
             </div>

@@ -1,14 +1,13 @@
 import React from 'react';
 
-const SearchInput = ({ placeholder = 'Search' }) => {
+const SearchInput = ({ placeholder = 'Search', value, onChange }) => {
   return (
     <div className="relative w-full font-sans">
-
       {/* Search Icon */}
       <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
         <svg
-          xmlns="http://www.w.w3.org/2000/svg"
-          className="h-5 w-5 text-gray-300" // Icon color
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 text-gray-300"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -26,6 +25,8 @@ const SearchInput = ({ placeholder = 'Search' }) => {
       <input
         type="text"
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         className="w-full border border-gray-200 rounded-full
                    py-2 pl-11 pr-4
                    text-gray-300 text-body-md font-normal

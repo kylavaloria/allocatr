@@ -1,100 +1,85 @@
 import React, { useState, Fragment } from 'react';
 import ResourceTableHeader from './ResourceTableHeader';
 import ResourceRow from './ResourceRow';
-import TaskDrawer from '../tasks/TaskDrawer'; // Import the component to be shown
+import TaskDrawer from '../tasks/TaskDrawer';
 
-const ResourceTable = () => {
-  const data = [
-    {
-      id: 1, // Added IDs for state management
-      name: 'John Doe',
-      unit: 'Technology Group',
-      role: 'Solutions Architect',
-      generalization: 'Solutions Engineering',
-      specialization: 'Solutions Design, AI Workplace',
-      currentAllocation: 60,
-      billableAllocation: 60,
-    },
-    {
-      id: 2,
-      name: 'John Doe',
-      unit: 'Technology Group',
-      role: 'Solutions Architect',
-      generalization: 'Solutions Engineering',
-      specialization: 'Solutions Design, AI Workplace',
-      currentAllocation: 60,
-      billableAllocation: 60,
-    },
-    {
-      id: 3,
-      name: 'John Doe',
-      unit: 'Technology Group',
-      role: 'Solutions Architect',
-      generalization: 'Solutions Engineering',
-      specialization: 'Solutions Design, AI Workplace',
-      currentAllocation: 60,
-      billableAllocation: 60,
-    },
-  ];
-
-  // --- State to track the currently expanded row ID ---
-  // This can be an array if you want multiple rows open
+const ResourceTable = ({ resources = [], onUpdate, onDelete, onRefresh }) => {
   const [expandedRowIds, setExpandedRowIds] = useState([]);
 
-  // --- Toggle the row ---
   const handleRowClick = (id) => {
     setExpandedRowIds((prevIds) => {
-      // If the ID is already in the array, remove it (to close)
       if (prevIds.includes(id)) {
         return prevIds.filter((rowId) => rowId !== id);
       }
-      // Otherwise, add it (to open)
       return [...prevIds, id];
     });
   };
 
+  // Show empty state if no resources
+  if (resources.length === 0) {
+    return (
+      <div className="w-full rounded-2xl border border-gray-200">
+        <table className="w-full border-collapse table-fixed">
+          <ResourceTableHeader />
+          <tbody>
+            <tr>
+              <td colSpan={8} className="px-4 py-8 text-center text-gray-300">
+                No resources found. Add your first resource to get started.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
   return (
-    // Removed border and rounded-2xl, as parent (Resources.jsx) handles this
     <div className="w-full rounded-2xl border border-gray-200">
-      {/* Added table-fixed for consistent column widths */}
-      <table className="w-full border-collapse table-fixed ">
+      <table className="w-full border-collapse table-fixed">
         <ResourceTableHeader />
         <tbody>
-          {data.map((item, index) => {
-            const isExpanded = expandedRowIds.includes(item.id);
-            // Check if this is the last row for rounding
-            const isLastRow = index === data.length - 1;
+          {resources.map((resource, index) => {
+            const isExpanded = expandedRowIds.includes(resource.ResourceID);
+            const isLastRow = index === resources.length - 1;
 
             return (
-              // Use Fragment to render the row + its expanded content
-              <Fragment key={item.id}>
+              <Fragment key={resource.ResourceID}>
                 <ResourceRow
-                  {...item} // Pass all data
+                  id={resource.ResourceID}
+                  name={resource.Name || 'N/A'}
+                  unit={resource.Unit || 'N/A'}
+                  role={resource.Role || 'N/A'}
+                  generalization={resource.Generalization || 'N/A'}
+                  specialization={resource.Specialization || 'N/A'}
+                  currentAllocation={resource.CurrentAllocation || 0}
+                  billableAllocation={resource.BillableAllocation || 0}
+                  capacity={resource.CapacityPerWeek || 0}
+                  rateCard={resource.RateCard || 0}
+                  nextAvailability={resource.NextAvailability}
+                  maxRevenuePerWeek={resource.MaxRevenuePerWeek || 0}
+                  actualRevenueThisWeek={resource.ActualRevenueThisWeek || 0}
+                  forecastedRevenue={resource.ForecastedRevenue || 0}
                   isExpanded={isExpanded}
-                  // This is the new logic for rounding:
-                  // Only apply if it's the last row AND it's not expanded
                   isLastRow={isLastRow && !isExpanded}
-                  onClick={() => handleRowClick(item.id)}
-                  // No onEdit or onDelete props are needed here
+                  onClick={() => handleRowClick(resource.ResourceID)}
+                  onUpdate={onUpdate}
+                  onDelete={onDelete}
+                  onRefresh={onRefresh}
                 />
 
-                {/* --- Conditionally render the expanded TaskDrawer --- */}
                 {isExpanded && (
                   <tr>
-                    {/* Full-width cell that spans all 8 columns */}
                     <td
                       colSpan={8}
                       className={`border-t border-gray-200 ${
                         isLastRow ? 'rounded-b-2xl' : ''
                       }`}
                     >
-                      {/* Padding and background removed from here */}
-                      <div
-                        className={`${
-                          isLastRow ? 'rounded-b-2xl' : ''
-                        }`}
-                      >
-                        <TaskDrawer />
+                      <div className={`${isLastRow ? 'rounded-b-2xl' : ''}`}>
+                        <TaskDrawer
+                          resourceId={resource.ResourceID}
+                          onRefresh={onRefresh}
+                        />
                       </div>
                     </td>
                   </tr>

@@ -4,22 +4,55 @@ import ProgressBar from '../ui/ProgressBar';
 import BillableIndicator from '../ui/BillableIndicator';
 import StatusBadge from '../ui/StatusBadge';
 import Action from '../ui/Action';
-import TaskModal from './TaskModal'; // 1. Import modals
+import TaskModal from './TaskModal';
 import DeleteDialogue from '../ui/DeleteDialogue';
+import { useTasks } from '../../hooks/useTasks';
 
-const TaskRow = ({ task }) => {
-  // --- 2. State for Action Dropdown ---
+const TaskRow = ({ task, onUpdate }) => {
   const [isActionOpen, setIsActionOpen] = useState(false);
-  const actionRef = useRef(null); // Ref for click-outside detection
-
-  // --- 3. NEW STATE for Modals ---
+  const actionRef = useRef(null);
   const [modalType, setModalType] = useState(null);
 
-  // --- 4. Click-outside-to-close logic ---
+  const { updateTask, deleteTask } = useTasks();
+
+  // Format dates
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+
+  // Calculate work days between dates
+  const calculateWorkDays = (startDate, endDate) => {
+    if (!startDate || !endDate) return 0;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  // Map TaskStatus to status badge format
+  const getStatusKey = (taskStatus) => {
+    const statusMap = {
+      'Done': 'done',
+      'Future Work': 'future',
+      'Leave': 'leave',
+      'Ongoing': 'ongoing',
+      'Paused': 'paused'
+    };
+    return statusMap[taskStatus] || 'ongoing';
+  };
+
+  // Click-outside-to-close logic
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (actionRef.current && !actionRef.current.contains(event.target)) {
-        setIsActionOpen(false); // Close the menu
+        setIsActionOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -28,85 +61,101 @@ const TaskRow = ({ task }) => {
     };
   }, []);
 
-  // --- 5. UPDATED Modal Handlers ---
+  // Modal Handlers
   const handleEdit = () => {
-    setModalType('edit'); // Open edit modal
+    setModalType('edit');
     setIsActionOpen(false);
   };
 
   const handleDelete = () => {
-    setModalType('delete'); // Open delete modal
+    setModalType('delete');
     setIsActionOpen(false);
   };
 
   const closeModal = () => {
-    setModalType(null); // Close any modal
+    setModalType(null);
   };
 
-  const handleSubmitEdit = () => {
-    console.log('SUBMITTING EDIT for task:', task.name);
-    closeModal();
+  const handleSubmitEdit = async (taskData) => {
+    const result = await updateTask(task.TaskID, taskData);
+    if (result.success) {
+      console.log('Task updated successfully');
+      closeModal();
+      if (onUpdate) onUpdate();
+    } else {
+      alert(`Error: ${result.error}`);
+    }
   };
 
-  const handleConfirmDelete = () => {
-    console.log('DELETING task:', task.name);
-    closeModal();
+  const handleConfirmDelete = async () => {
+    const result = await deleteTask(task.TaskID);
+    if (result.success) {
+      console.log('Task deleted successfully');
+      closeModal();
+      if (onUpdate) onUpdate();
+    } else {
+      alert(`Error: ${result.error}`);
+    }
   };
 
   return (
-    // 6. Use Fragment to render the row AND its modals
     <Fragment>
       <tr className="text-gray-300 text-body-xs font-normal font-sans border-b border-gray-200 last:border-b-0">
-        {/* Task */}
-        <td className="px-4 py-3 align-top">{task.name}</td>
+        {/* Task Name */}
+        <td className="px-4 py-3 align-top">
+          {task.TaskName || 'Untitled Task'}
+        </td>
 
         {/* Type */}
-        <td className="px-4 py-3 align-top whitespace-nowrap">{task.type}</td>
+        <td className="px-4 py-3 align-top whitespace-nowrap">
+          {task.TaskType || '-'}
+        </td>
 
         {/* Schedule */}
         <td className="px-4 py-3 align-top whitespace-nowrap">
-          {task.schedule}
+          {formatDate(task.StartDate)} - {formatDate(task.EndDate)}
         </td>
 
         {/* Work Days */}
-        <td className="px-4 py-3 align-top">{task.workDays}</td>
+        <td className="px-4 py-3 align-top">
+          {calculateWorkDays(task.StartDate, task.EndDate)}
+        </td>
 
         {/* Allocation */}
         <td className="px-4 py-3 align-top">
           <div className="flex items-center gap-2 whitespace-nowrap">
-            <AllocationBar value={task.allocation} />
-            <span>{task.allocation}%</span>
+            <AllocationBar value={task.TaskAllocationPercentage || 0} />
+            <span>{task.TaskAllocationPercentage || 0}%</span>
           </div>
         </td>
 
         {/* Progress */}
         <td className="px-4 py-3 align-top">
           <div className="flex items-center gap-2 whitespace-nowrap">
-            <ProgressBar value={task.progress} />
-            <span>{task.progress}%</span>
+            <ProgressBar value={task.TaskProgress || 0} />
+            <span>{task.TaskProgress || 0}%</span>
           </div>
         </td>
 
         {/* Billable */}
         <td className="px-4 py-3 align-top">
-          <BillableIndicator isBillable={task.isBillable} />
+          <BillableIndicator isBillable={task.Billable === true || task.Billable === 1} />
         </td>
 
         {/* Status */}
         <td className="px-4 py-3 align-top">
-          <StatusBadge status={task.status} />
+          <StatusBadge status={getStatusKey(task.TaskStatus)} />
         </td>
 
-        {/* --- 7. Actions Column Updated --- */}
+        {/* Actions */}
         <td className="px-4 py-3 align-top text-center">
-          {/* Wrap button and dropdown in a relative container */}
           <div
             className="relative inline-block"
             ref={actionRef}
-            onClick={(e) => e.stopPropagation()} // Stop click from bubbling
+            onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setIsActionOpen((prev) => !prev)} // Toggle state
+              onClick={() => setIsActionOpen((prev) => !prev)}
               className="text-gray-300 p-1 rounded-full hover:text-primary-dark transition-colors"
             >
               <svg
@@ -119,7 +168,6 @@ const TaskRow = ({ task }) => {
               </svg>
             </button>
 
-            {/* --- Conditionally render Action dropdown --- */}
             {isActionOpen && (
               <Action onEdit={handleEdit} onDelete={handleDelete} />
             )}
@@ -127,7 +175,7 @@ const TaskRow = ({ task }) => {
         </td>
       </tr>
 
-      {/* 8. RENDER THE MODALS (conditionally) */}
+      {/* Modals */}
       {modalType === 'edit' && (
         <TaskModal
           type="edit"
